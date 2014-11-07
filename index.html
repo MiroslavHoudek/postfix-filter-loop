@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Postfix-filter-loop : This is a very simple Python code to achieve Advanced Content Filtering in Postfix ( http://www.postfix.org/FILTER_README.html ) . This Python code listens on one port to get emails from Postfix, then you can do the magic (remove email, change contents) and then re-inject the mail into Postfix. I needed a Python code to do just that, using only standard modules, and absolutely straightforward. So there, get it, configure Postfix, start it, and do whatever you want with headers or body.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Postfix-filter-loop</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/MiroslavHoudek/postfix-filter-loop">View on GitHub</a>
+
+          <h1 id="project_title">Postfix-filter-loop</h1>
+          <h2 id="project_tagline">This is a very simple Python code to achieve Advanced Content Filtering in Postfix ( http://www.postfix.org/FILTER_README.html ) . This Python code listens on one port to get emails from Postfix, then you can do the magic (remove email, change contents) and then re-inject the mail into Postfix. I needed a Python code to do just that, using only standard modules, and absolutely straightforward. So there, get it, configure Postfix, start it, and do whatever you want with headers or body.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/MiroslavHoudek/postfix-filter-loop/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/MiroslavHoudek/postfix-filter-loop/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="postfix-filter-loop" class="anchor" href="#postfix-filter-loop" aria-hidden="true"><span class="octicon octicon-link"></span></a>postfix-filter-loop</h1>
+
+<p>This is a very simple Python code to achieve Advanced Content Filtering in Postfix ( <a href="http://www.postfix.org/FILTER_README.html">http://www.postfix.org/FILTER_README.html</a> ) . This Python code listens on one port to get emails from Postfix, then you can do the magic (remove email, change contents) and then re-inject the mail into Postfix. I needed a Python code to do just that, using only standard modules, and absolutely straightforward. So there, get it, configure Postfix, start it, and do whatever you want with headers or body.</p>
+
+<p>What you need to do on Postfix side is to edit configuration according to the suggestions made in the Advanced Content Filtering above, but for your convenience, here is the quick version that could work for you too:</p>
+
+<p>(/etc/postfix/)main.cf:
+content_filter = scan:localhost:10025
+receive_override_options = no_address_mappings</p>
+
+<p>(/etc/postfix/)master.cf:
+scan      unix  -       -       n       -       10      smtp
+      -o smtp_send_xforward_command=yes
+      -o disable_mime_output_conversion=yes</p>
+
+<p>localhost:10026 inet  n       -       n       -       10      smtpd
+      -o content_filter=
+      -o receive_override_options=no_unknown_recipient_checks,no_header_body_checks,no_milters
+      -o smtpd_authorized_xforward_hosts=127.0.0.0/8</p>
+
+<p>There are ways combinations of parameters to do that (see the FILTER_README referred above) but only this one worked for me. This is because what I needed is that mails come to my Python code BEFORE processed using virtual table and they get processed using virtual table AFTER. This is what I needed, but you can change the no_address_mappings parameter in main.cf and master.cf to do thy bidding.</p>
+
+<p>There are very good alternatives to using my code - specifically FuGlu ( <a href="http://www.fuglu.org/">http://www.fuglu.org/</a> ) - which I did not want to use because it is a bit more complex than I needed, and also seems to just have emphasis on filtering, whereas what I wanted to do was not only filter, but also change the content of mails. There is also Perl code which (I think) is similar SMTPProx <a href="http://bent.latency.net/smtpprox/">http://bent.latency.net/smtpprox/</a> but I don't know Perl by heart and I suspected that the code would again be more complicated to bend to my purposes.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Postfix-filter-loop maintained by <a href="https://github.com/MiroslavHoudek">MiroslavHoudek</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
