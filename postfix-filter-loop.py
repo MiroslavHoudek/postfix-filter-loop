@@ -1,3 +1,7 @@
+# Author: Miroslav Houdek miroslav.houdek at gmail dot com
+# License is, do whatever you wanna do with it (at least I think that that is what LGPL v3 says)
+#
+
 import smtpd
 import asyncore
 
@@ -25,9 +29,10 @@ class CustomSMTPServer(smtpd.SMTPServer):
 
 		try:
 			# DO WHAT YOU WANNA DO WITH THE EMAIL HERE
-			# I'd like to include some more functions for users convenience, such as 
-			# functions to change fields within the body (From, Reply-to etc), 
-			# and/or to send error codes back to Postfix.
+			# In future I'd like to include some more functions for users convenience, 
+			# such as functions to change fields within the body (From, Reply-to etc), 
+			# and/or to send error codes/mails back to Postfix.
+			# Error handling is not really fantastic either.
 		
 			pass
 		except:
